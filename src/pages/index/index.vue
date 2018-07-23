@@ -6,6 +6,7 @@
       <div class="userinfo-nickname">
         <card :text="userInfo.nickName"></card>
       </div>
+      <open-data type="userAvatarUrl"></open-data>
     </div>
 
     <div class="usermotto">
@@ -46,9 +47,14 @@ export default {
       // 调用登录接口
       wx.login({
         success: () => {
+          console.log('login success')
           wx.getUserInfo({
             success: (res) => {
+              console.log('getUserInfo', res)
               this.userInfo = res.userInfo
+            },
+            fail: () => {
+              console.log('getUserInfo fail')
             }
           })
         }
