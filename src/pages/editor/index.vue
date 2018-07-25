@@ -178,6 +178,20 @@ page {
 </template>
 
 <script>
+import {globalData} from '../../services/globalData.js'
+import {changeBg} from '../../services/service.js'
+ // 函数截留
+const throttle = function(func, deltaX) {
+  let lastCalledAt = new Date().getTime();
+  return function(e) {
+    if(new Date().getTime() - lastCalledAt >= deltaX) {
+        func.apply(this, arguments);
+        lastCalledAt = new Date().getTime();
+    } else {
+      console.log('不执行')
+    }
+  }
+}
 // 角度计算
 const getLen = function(v) {
   return Math.sqrt(v.x * v.x + v.y * v.y);
@@ -330,8 +344,11 @@ export default {
         gesture.zoom = true
         // console.log('双指缩放', gesture)
       }
-    },
-    stickerOntouchmove (e) {
+    }, 
+    stickerOntouchmove: throttle(function (e) {
+      this.handleStickerOntouchmove(e)
+    }, 1000/10),
+    handleStickerOntouchmove (e) {
       console.log('stickerOntouchmove', e)
       const {touches} = e.mp
       const {frame, sticker} = this
@@ -402,13 +419,21 @@ export default {
         gesture.zoom = false
       }
     },
-
+    async getThemeData () {
+      console.log(123)
+      const res = await changeBg.theme('159718980238381056')
+      console.log('res', res)
+    }
   },
   created () {
     // console.log('editor created')
   },
-  mounted () {
-    console.log('editor mounted')
+  async mounted () {
+    console.log('editor mounted', this)
+    // var app= getApp()
+    // console.log('app', app) // I am global data
+    console.log('globalData', globalData)
+    await this.getThemeData()
      // 计算frame参数
     this.calFrameRect()
   }

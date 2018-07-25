@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import App from './App'
+import {globalData} from './services/globalData.js'
 
 Vue.config.productionTip = false
 App.mpType = 'app'
 
 const app = new Vue(App)
 app.$mount()
+
+globalData.name = '测试一下'
 
 export default {
   // 这个字段走 app.json
@@ -20,7 +23,8 @@ export default {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      navigationStyle: 'custom'
     }
   }
 }
